@@ -56,18 +56,18 @@ namespace Joie.Input
         };
 
         public static Vector2 MousePosition { get => NewMouseState.Position.ToVector2(); }
-        public static Vector2 MouseWorldPosition
-        {
-            get => Vector2.Transform(MousePositionFromCenterWithCameraZoom
-                , Game1.CurrentScene.SceneCamera.PositionTransform);
-        }
+        //public static Vector2 MouseWorldPosition
+        //{
+        //    get => Vector2.Transform(MousePositionFromCenterWithCameraZoom
+        //        , Game1.CurrentScene.SceneCamera.PositionTransform);
+        //}
         public static Vector2 MousePositionFromCenter
         {
             get => MousePosition.IsBetween(0f, WindowManager.ViewportSize.X, 0f, WindowManager.ViewportSize.Y)
                     ? MousePosition - WindowManager.ViewportSize / 2
                     : Vector2.Zero; // maybe remove the outside of viewport check
         }
-        public static Vector2 MousePositionFromCenterWithCameraZoom { get => MousePositionFromCenter / Game1.CurrentScene.SceneCamera.Zoom; }
+        //public static Vector2 MousePositionFromCenterWithCameraZoom { get => MousePositionFromCenter / Game1.CurrentScene.SceneCamera.Zoom; }
 
         public static float MouseScroll { get { return NewMouseState.ScrollWheelValue - OldMouseState.ScrollWheelValue; } }
         public static int MouseScrollingDirection { get { return Math.Sign(MouseScroll); } }

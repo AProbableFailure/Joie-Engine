@@ -32,9 +32,9 @@ namespace Joie
             WindowManager.ViewportSize = new Vector2(2560, 1440);
 
             CurrentScene = new TestingScene();
-            CurrentScene.BuildScene();
+            //CurrentScene.BuildScene();
 
-            CurrentScene.InitializeScene();
+            //CurrentScene.InitializeScene();
 
             base.Initialize();
         }
@@ -45,7 +45,7 @@ namespace Joie
 
             // TODO: use this.Content to load your game content here
 
-            CurrentScene.LoadContentScene(_content);
+            //CurrentScene.LoadContentScene(_content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -69,7 +69,7 @@ namespace Joie
 
             // TODO: Add your update logic here
 
-            CurrentScene.UpdateScene(gameTime);
+            //CurrentScene.UpdateScene(gameTime);
 
             base.Update(gameTime);
         }
@@ -80,7 +80,7 @@ namespace Joie
 
             // TODO: Add your drawing code here
 
-            CurrentScene.DrawScene(_spriteBatch);
+            //CurrentScene.DrawScene(_spriteBatch);
 
             base.Draw(gameTime);
         }

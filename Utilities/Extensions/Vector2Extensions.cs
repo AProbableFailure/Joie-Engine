@@ -58,14 +58,14 @@ namespace Joie.Extensions
 
 
 
-        public static Vector2 WorldToScreen(this Vector2 inWorld, Scene scene)
-            => Vector2.Transform(inWorld, scene.SceneCamera.RawSceneCameraMatrix);
-        public static Vector2 WorldToScreen(this Vector2 inWorld, Matrix rawSceneCameraMatrix)
-            => Vector2.Transform(inWorld, rawSceneCameraMatrix);
+        //public static Vector2 WorldToScreen(this Vector2 inWorld, Scene scene)
+        //    => Vector2.Transform(inWorld, scene.SceneCamera.RawSceneCameraMatrix);
+        //public static Vector2 WorldToScreen(this Vector2 inWorld, Matrix rawSceneCameraMatrix)
+        //    => Vector2.Transform(inWorld, rawSceneCameraMatrix);
 
-        public static Vector2 ScreenToWorld(this Vector2 onScreen, Scene scene)
-            => Vector2.Transform(onScreen, Matrix.Invert(scene.SceneCamera.RawSceneCameraMatrix));
-        public static Vector2 ScreenToWorld(this Vector2 onScreen, Matrix rawSceneCameraMatrix)
-            => Vector2.Transform(onScreen, Matrix.Invert(rawSceneCameraMatrix));
+        //public static Vector2 ScreenToWorld(this Vector2 onScreen, Scene scene)
+        //    => Vector2.Transform(onScreen, Matrix.Invert(scene.SceneCamera.RawSceneCameraMatrix));
+        //public static Vector2 ScreenToWorld(this Vector2 onScreen, Matrix rawSceneCameraMatrix)
+        //    => Vector2.Transform(onScreen, Matrix.Invert(rawSceneCameraMatrix));
     }
 }

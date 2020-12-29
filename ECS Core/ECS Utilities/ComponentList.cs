@@ -6,8 +6,6 @@ namespace Joie.ECS.Utilities
 {
     public class ComponentList
     {
-        Entity _entity;
-
         List<Component> _components = new List<Component>();
         List<IInitializableComponent> _initializableComponents = new List<IInitializableComponent>();
         List<IContentLoadableComponent> _loadableComponents = new List<IContentLoadableComponent>();
@@ -18,9 +16,9 @@ namespace Joie.ECS.Utilities
         List<Component> _componentsToRemove = new List<Component>();
         List<Component> _tempBufferList = new List<Component>();
 
-        public ComponentList(Entity entity)
+        public ComponentList()
         {
-            _entity = entity;
+            
         }
 
         public int Count => _components.Count;
@@ -72,7 +70,7 @@ namespace Joie.ECS.Utilities
                 _renderableComponents.Remove(renderable);
 
             //component.OnRemovedFromEntity();
-            component.ParentEntity = null;
+            //component.ParentEntity = null;
         }
 
         public T GetComponent<T>(bool onlyInitializedComponents = false) where T : Component
@@ -146,7 +144,7 @@ namespace Joie.ECS.Utilities
                 {
                     //var component = _tempBufferList[i];
                     //component.OnAddComponent(_entity);
-                    _tempBufferList[i].OnAddComponent(_entity);
+                    //_tempBufferList[i].OnAddComponent(_entity);
 
                     // component.enabled checks both the Entity and the Component
                     //if (component.Enabled)

@@ -6,11 +6,15 @@ namespace Joie.ECS
 {
     public class Component
     {
-        public Entity ParentEntity { get; set; }
+        public List<uint> Entities = new List<uint>();
         public bool Enabled { get; set; } = true;
 
-        // We're setting the entity on_add instead of on construction so that 
-        // you don't need to pass an entity every construction
-        public virtual void OnAddComponent(Entity parentEntity) => ParentEntity = parentEntity;
+        // in implementation, add the entityID to each property and give them default implementations
+        public virtual void HandleEntityAddition(uint entityID)
+            => Entities.Add(entityID);
+        public virtual void HandleEntityRemoval(uint entityID)
+            => Entities.Remove(entityID);
+
+        // create a method to set the values of properties in each component
     }
 }
