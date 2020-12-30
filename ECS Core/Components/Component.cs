@@ -4,16 +4,14 @@ using System.Text;
 
 namespace Joie.ECS
 {
-    public class Component
+    public abstract class Component //public class Component
     {
-        public List<uint> Entities = new List<uint>();
+        //public List<uint> Entities = new List<uint>();
+        public Entity Entity { get; set; }
         public bool Enabled { get; set; } = true;
-
-        // in implementation, add the entityID to each property and give them default implementations
-        public virtual void HandleEntityAddition(uint entityID)
-            => Entities.Add(entityID);
-        public virtual void HandleEntityRemoval(uint entityID)
-            => Entities.Remove(entityID);
+        public virtual void OnAddComponent(Entity entity) => Entity = entity;
+        //public abstract void HandleEntityAddition(uint entityID);
+        //public abstract void HandleEntityRemoval(uint entityID);
 
         // create a method to set the values of properties in each component
     }

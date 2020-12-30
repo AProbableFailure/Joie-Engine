@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +9,8 @@ namespace Joie.ECS.Utilities
 {
     public class ComponentList
     {
+        Entity _entity;
+
         List<Component> _components = new List<Component>();
         List<IInitializableComponent> _initializableComponents = new List<IInitializableComponent>();
         List<IContentLoadableComponent> _loadableComponents = new List<IContentLoadableComponent>();
@@ -16,9 +21,9 @@ namespace Joie.ECS.Utilities
         List<Component> _componentsToRemove = new List<Component>();
         List<Component> _tempBufferList = new List<Component>();
 
-        public ComponentList()
+        public ComponentList(Entity entity)
         {
-            
+            _entity = entity;
         }
 
         public int Count => _components.Count;
@@ -66,11 +71,11 @@ namespace Joie.ECS.Utilities
                 _loadableComponents.Remove(loadable);
             if (component is IUpdatableComponent updatable)
                 _updatableComponents.Remove(updatable);
-            if (component is IDrawableComponent renderable)
-                _renderableComponents.Remove(renderable);
+            if (component is IDrawableComponent drawable)
+                _renderableComponents.Remove(drawable);
 
             //component.OnRemovedFromEntity();
-            //component.ParentEntity = null;
+            component.Entity = null;
         }
 
         public T GetComponent<T>(bool onlyInitializedComponents = false) where T : Component
@@ -86,27 +91,6 @@ namespace Joie.ECS.Utilities
 
             return null;
         }
-
-        //public void GetComponents<T>(List<T> components) where T : class
-        //{
-        //    //for (var i = 0; i < _components.Length; i++)
-        //    //{
-        //    //    var component = _components.Buffer[i];
-        //    //    if (component is T)
-        //    //        components.Add(component as T);
-        //    //}
-        //    foreach (var component in components)
-        //        if (component is T TComponent)
-        //            return TComponent;
-
-        //    // we also check the pending components just in case addComponent and getComponent are called in the same frame
-        //    for (var i = 0; i < _componentsToAdd.Count; i++)
-        //    {
-        //        var component = _componentsToAdd[i];
-        //        if (component is T)
-        //            components.Add(component as T);
-        //    }
-        //}
 
         public void UpdateLists() //private
         {
@@ -129,8 +113,8 @@ namespace Joie.ECS.Utilities
                         _initializableComponents.Add(initializable);
                     if (component is IContentLoadableComponent loadable)
                         _loadableComponents.Add(loadable);
-                    if (component is IDrawableComponent renderable)
-                        _renderableComponents.Add(renderable);
+                    if (component is IDrawableComponent drawable)
+                        _renderableComponents.Add(drawable);
                     if (component is IUpdatableComponent updatable)
                         _updatableComponents.Add(updatable);
 
@@ -144,7 +128,7 @@ namespace Joie.ECS.Utilities
                 {
                     //var component = _tempBufferList[i];
                     //component.OnAddComponent(_entity);
-                    //_tempBufferList[i].OnAddComponent(_entity);
+                    _tempBufferList[i].OnAddComponent(_entity);
 
                     // component.enabled checks both the Entity and the Component
                     //if (component.Enabled)
@@ -164,7 +148,7 @@ namespace Joie.ECS.Utilities
                     component.InitializeComponent();
         }
 
-        public void LoadContentComponents(Microsoft.Xna.Framework.Content.ContentManager content)
+        public void LoadContentComponents(ContentManager content)
         {
             UpdateLists();
 
@@ -173,7 +157,7 @@ namespace Joie.ECS.Utilities
                     component.LoadContentComponent(content);
         }
 
-        public void UpdateComponents(Microsoft.Xna.Framework.GameTime gameTime)
+        public void UpdateComponents(GameTime gameTime)
         {
             UpdateLists();
 
@@ -182,7 +166,7 @@ namespace Joie.ECS.Utilities
                     component.UpdateComponent(gameTime);
         }
 
-        public void DrawComponents(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
+        public void DrawComponents(SpriteBatch spriteBatch)
         {
             //UpdateLists();
 

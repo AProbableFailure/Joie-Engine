@@ -7,9 +7,13 @@ namespace Joie.ECS.Utilities
     public static class IDGenerator
     {
         private static uint _id = 0;
-        public static uint ID
-        {
-            get => ++_id;
-        }
+        //public static uint ID
+        //{
+        //    get => ++_id;
+        //}
+        public static uint GetNewID()
+            => _id++;
+        public static uint GetLatestIDSet()
+            => _id;
     }
 }
