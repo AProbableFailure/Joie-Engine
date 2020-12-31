@@ -10,7 +10,28 @@ namespace Joie.Scenes
 {
     public class TestingScene2 : Scene
     {
-        public override string SceneName { get; set; } = "Second";
+        public TestingScene2()
+        {
+            SceneName = "Second Scene";
+        }
+
+        public override void Scene_ContentCanvas()
+        {
+            AddContent(ContentType.Texture2D, "player", "SmileyWalk");
+            //AddContent(ContentType.Texture2D, "moon", "moon_PNG36");
+            //AddContent(ContentType.Texture2D, "floor", "Test_Floor");
+            //base.SceneContentCanvas();
+        }
+
+        public override void Scene_Canvas()
+        {
+            
+
+
+        }
+
+        //public override string SceneName { get; set; } = "Second";
+
         //public override void BuildScene()
         //{
         //    //var background = AddEntity("background");
@@ -31,16 +52,5 @@ namespace Joie.Scenes
         //    //rope.AddComponent(new RopeSimulationComponent(firstAnchor, secondAnchor, false));       //(15f, 35, 4f, false, firstAnchor, secondAnchor));//InputManager.MouseWorldPosition, new Vector2(40, 40)));
 
         //}
-        //public override void LoadSceneContent(ContentManager content)
-        //{
-        //    //throw new NotImplementedException();
-        //}
-        public override void SceneContentCanvas()
-        {
-            AddContent(ContentType.Texture2D, "player", "SmileyWalk");
-            //AddContent(ContentType.Texture2D, "moon", "moon_PNG36");
-            //AddContent(ContentType.Texture2D, "floor", "Test_Floor");
-            //base.SceneContentCanvas();
-        }
     }
 }

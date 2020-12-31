@@ -15,7 +15,7 @@ namespace Joie
 {
     public class Core : Game
     {
-        private Vector2 _defaultViewportSize;// = new Vector2(2560, 1440);
+        private Vector2 _defaultViewportSize;
 
         public static ContentManager _content;
         public static GraphicsDeviceManager _graphics;
@@ -23,6 +23,7 @@ namespace Joie
 
         public static Scene CurrentScene;
 
+        public BuildSystem Builder = new BuildSystem();
         public RenderSystem Renderer = new RenderSystem();
 
         public Core(int defaultViewportX = 2650, int defaultViewportY = 1440)
@@ -39,14 +40,17 @@ namespace Joie
         protected override void Initialize()
         {
             WindowManager.ViewportSize = _defaultViewportSize;
+
+            //CurrentScene.Scene_Canvas();
+            Builder.System_BuildScene(CurrentScene);
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            //CurrentScene.LoadContentScene(_content);
-            Renderer.System_LoadContent(CurrentScene);
+            //Renderer.System_LoadContent(CurrentScene);
         }
 
         protected override void Update(GameTime gameTime)
@@ -65,16 +69,10 @@ namespace Joie
             if (InputManager.IsInput(InputManager.Triggered, Inputs.Right))
                 Console.WriteLine("Right");
 
-            //CurrentScene.UpdateScene(gameTime);
-
-            //if (InputManager.IsInput(InputManager.Triggered, Inputs.Fire1))
-            //    ChangeScene
             if (InputManager.IsKey(InputManager.Triggered, Microsoft.Xna.Framework.Input.Keys.O))
                 ChangeScene(new TestingScene());
             if (InputManager.IsKey(InputManager.Triggered, Microsoft.Xna.Framework.Input.Keys.P))
                 ChangeScene(new TestingScene2());
-            //OnSceneChanged();
-            //Renderer.UnloadContentSystem();
 
             base.Update(gameTime);
         }
@@ -84,27 +82,21 @@ namespace Joie
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             //CurrentScene.DrawScene(_spriteBatch);
+            Renderer.System_Render(_spriteBatch, CurrentScene);
 
             base.Draw(gameTime);
         }
 
-        //public delegate void OnSceneChangeHandler(object sender, EventArgs e);
         public delegate void SceneChangedHandler();
         public static event SceneChangedHandler SceneChanged;
-        //public static event EventHandler<Scene> SceneChanged;
 
-        protected virtual void OnSceneChanged()//EventArgs e)
-        {
-            //SceneChangedHandler handler = SceneChanged;
-            SceneChanged?.Invoke();//(this, CurrentScene);//(this, e);
-        }
+        protected virtual void OnSceneChanged()
+            => SceneChanged?.Invoke();
 
         public void ChangeScene(Scene scene)
         {
             CurrentScene = scene;
             OnSceneChanged();
-            //Initialize();
-            //LoadContent();
         }
     }
 }

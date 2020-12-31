@@ -1,4 +1,5 @@
-﻿using Joie.ECS;
+﻿using Joie.Components;
+using Joie.ECS;
 using Joie.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -10,37 +11,22 @@ namespace Joie.Scenes
 {
     public class TestingScene : Scene
     {
-        public override string SceneName { get; set; } = "First";
-        //public override void BuildScene()
-        //{
-        //    //var background = AddEntity("background");
-        //    //background.AddComponent(new Texture2DComponent("Test_Floor"));
+        public TestingScene()
+        {
+            SceneName = "First Scene";
+        }
 
-        //    ////var moon = AddEntity("moon");
-        //    ////moon.AddComponent(new Texture2DComponent("moon_PNG36"));
-
-        //    //var player = AddEntity(new PlayerEntity("player"));
-        //    //player.AddComponent(new FollowCameraComponent());
-
-        //    //var rope = AddEntity("rope");
-        //    //Func<Vector2> firstAnchor = () => player.CenterPosition;//InputManager.MouseWorldPosition;
-        //    //Func<Vector2> secondAnchor = () => firstAnchor().DistanceTo(InputManager.MouseWorldPosition) <= 15 * 35 ? InputManager.MouseWorldPosition
-        //    //                          : (InputManager.MousePositionFromCenter.SafeNormalize() * 15 * 35) + firstAnchor();
-        //    ////secondAnchor = () => Vector2.Zero;
-
-        //    //rope.AddComponent(new RopeSimulationComponent(firstAnchor, secondAnchor, false));       //(15f, 35, 4f, false, firstAnchor, secondAnchor));//InputManager.MouseWorldPosition, new Vector2(40, 40)));
-
-        //}
-        //public override void LoadSceneContent(ContentManager content)
-        //{
-        //    //throw new NotImplementedException();
-        //}
-        public override void SceneContentCanvas()
+        public override void Scene_ContentCanvas()
         {
             AddContent(ContentType.Texture2D, "player", "SmileyWalk");
-            //AddContent(ContentType.Texture2D, "moon", "moon_PNG36");
+            AddContent(ContentType.Texture2D, "moon", "moon_PNG36");
             AddContent(ContentType.Texture2D, "floor", "Test_Floor");
-            //base.SceneContentCanvas();
+        }
+
+        public override void Scene_Canvas()
+        {
+            var player = AddEntity("player");
+            player.AddComponent(new Texture2DComponent("player"));
         }
     }
 }

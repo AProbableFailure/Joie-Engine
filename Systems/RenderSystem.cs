@@ -1,6 +1,8 @@
 ﻿using Joie;
+using Joie.Components;
 using Joie.ECS;
 using Joie.Structures;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,41 +16,36 @@ namespace Joie.Systems
     public enum ContentType
     {
         Texture2D,
-        SoundEffect
+        SoundEffect,
     }
 
-    public class RenderSystem
+    public class RenderSystem : ECSSystem
     {
-        //public DelayedList<Texture2D> SpaceTextures;
-        public Dictionary<string, Texture2D> SceneTextures = new Dictionary<string, Texture2D>();
-        public Dictionary<string, SoundEffect> SceneAudio = new Dictionary<string, SoundEffect>();
-        
-        //Joie.Core.SceneChanged +=
-        public RenderSystem()
-        {
-            Core.SceneChanged += RendererOnSceneChanged;
-        }
+        public Dictionary<string, Texture2D> SceneTextures = new Dictionary<string, Texture2D>(); // name, Texture2D
+        public Dictionary<string, SoundEffect> SceneAudio = new Dictionary<string, SoundEffect>(); // name, SoundEffect
+
+        public Effect SceneShader;
 
         public void System_LoadContent(Scene scene)
         {
-            //SceneTextures.Clear();
-            //SceneAudio.Clear();
-
-            scene.SceneContentCanvas();//(Core._content);
-            LoadContentPaths(scene, Core._content);
-
-            //Console.WriteLine(SceneTextures.Count);
-            //Console.WriteLine(scene.SceneName);
-            //Console.WriteLine(SceneAudio.Count);
+            scene.Scene_ContentCanvas();
+            System_LoadContentPaths(scene, Core._content);
         }
 
-        private void LoadContentPaths(Scene scene, ContentManager content)
+        private void System_LoadContentPaths(Scene scene, ContentManager content)
         {
-            //var sceneContentPaths = scene.SceneContentPaths;//.Where(kvp => kvp.Key.Item1)
-            //var sceneTexturePaths = sceneContentPaths.Where(kvp => kvp.Key.Item1 == ContentType.Texture2D);
-            //SceneTextures.Clear();
-            //SceneAudio.Clear();
+            // Clear all asset 
+            // TODO: MAKE IT SO THAT IT DOES NOT CLEAR ON SCENE CHANGE IF CONTENT ALREADY EXISTS IN A LIST
+            SceneTextures.Clear();
+            SceneAudio.Clear();
+            SceneShader = null;
+
+            // Setting shader
+            if (scene.SceneShaderPath != null)
+                SceneShader = content.Load<Effect>(scene.SceneShaderPath);
             
+
+            // Loading all content from paths while organizing them to their respective dictionaries
             foreach (var kvp in scene.SceneContentPaths)
             {
                 switch (kvp.Key.Item1)
@@ -67,26 +64,30 @@ namespace Joie.Systems
 
         public void System_UnloadContent()
         {
-            //Console.WriteLine("unload");
             Core._content.Unload();
         }
 
         public void System_Render(SpriteBatch spriteBatch, Scene scene)
         {
             spriteBatch.Begin();
+
+            foreach (var entity in scene.Entities)
+            {
+                foreach (var component in entity.Components)
+                {
+                    if (component is Texture2DComponent tcomp)
+                        spriteBatch.Draw(SceneTextures[tcomp.TextureName], new Vector2(100, 100), Color.White);
+                }
+            }
+
             spriteBatch.End();
         }
 
-        private void RendererOnSceneChanged()//(object sender)//(object sender, EventArgs e)
+        protected override void System_OnSceneChanged()
         {
-            //SceneTextures.Clear();
-            //Console.WriteLine("ha");
-            //System_LoadContent(scene);
-            SceneTextures.Clear();
-            SceneAudio.Clear();
-
+            //Core._content.Unload();
+            System_UnloadContent();
             System_LoadContent(Core.CurrentScene);
         }
-
     }
 }
