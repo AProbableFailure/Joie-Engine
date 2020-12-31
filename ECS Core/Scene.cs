@@ -28,7 +28,7 @@ namespace Joie.ECS
         //    // Add entities and whatnot here
         //}
 
-        public abstract void Scene_ContentCanvas();//(ContentManager content)
+        //public abstract void Scene_ContentCanvas();//(ContentManager content)
         
 
         public void AddContent(ContentType contentType, string name, string filePath)

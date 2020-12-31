@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Joie.Components
+namespace Joie.Ignore.Components
 {
     public class Animation//Component : Component
     {

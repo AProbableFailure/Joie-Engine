@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Joie.Systems
+namespace Joie.Ignore.Systems
 {
     public class AnimationComponent//System : ECSSystem
     {

@@ -23,8 +23,8 @@ namespace Joie
 
         public static Scene CurrentScene;
 
-        public BuildSystem Builder = new BuildSystem();
-        public RenderSystem Renderer = new RenderSystem();
+        public static BuildSystem Builder;// = new BuildSystem();
+        public static RenderSystem Renderer;// = new RenderSystem();
 
         public Core(int defaultViewportX = 2650, int defaultViewportY = 1440)
         {
@@ -40,6 +40,9 @@ namespace Joie
         protected override void Initialize()
         {
             WindowManager.ViewportSize = _defaultViewportSize;
+
+            Renderer = new RenderSystem();
+            Builder = new BuildSystem();//BuildSystem(Renderer);
 
             //CurrentScene.Scene_Canvas();
             Builder.System_BuildScene(CurrentScene);

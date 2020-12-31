@@ -15,17 +15,17 @@ namespace Joie.Scenes
             SceneName = "Second Scene";
         }
 
-        public override void Scene_ContentCanvas()
-        {
-            AddContent(ContentType.Texture2D, "player", "SmileyWalk");
-            //AddContent(ContentType.Texture2D, "moon", "moon_PNG36");
-            //AddContent(ContentType.Texture2D, "floor", "Test_Floor");
-            //base.SceneContentCanvas();
-        }
+        //public override void Scene_ContentCanvas()
+        //{
+        //    AddContent(ContentType.Texture2D, "player", "SmileyWalk");
+        //    //AddContent(ContentType.Texture2D, "moon", "moon_PNG36");
+        //    //AddContent(ContentType.Texture2D, "floor", "Test_Floor");
+        //    //base.SceneContentCanvas();
+        //}
 
         public override void Scene_Canvas()
         {
-            
+            AddContent(ContentType.Texture2D, "player", "SmileyWalk");
 
 
         }
