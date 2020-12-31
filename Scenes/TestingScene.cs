@@ -1,5 +1,6 @@
 ﻿using Joie.Components;
 using Joie.ECS;
+using Joie.Input;
 using Joie.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -23,18 +24,26 @@ namespace Joie.Scenes
         //    AddContent(ContentType.Texture2D, "floor", "Test_Floor");
         //}
 
-        public override void Scene_Canvas()
+        public override void Scene_ContentCanvas()
         {
             AddContent(ContentType.Texture2D, "player", "SmileyWalk");
             AddContent(ContentType.Texture2D, "moon", "moon_PNG36");
             AddContent(ContentType.Texture2D, "floor", "Test_Floor");
+        }
 
+        public override void Scene_Canvas()
+        {
             var player = AddEntity("player");
-            player.AddComponent(new Texture2DComponent("player", 0.25f, 0.25f, 0.5f, 0.5f));
+            //player.AddComponent(new Texture2DComponent("player", 0.25f, 0.25f, 0.5f, 0.5f));
 
-            //var test = new Texture2DComponent("player");
-            //var animation = player.AddComponent(new AnimationComponent());
-            //animation.AddAnimation(() => true, new Animation(test, 0.25f, 0.25f));
+            var test = new Texture2DComponent("player");
+            var animation = player.AddComponent(new AnimationComponent());
+
+            Func<bool> p = () => InputManager.IsInput(InputManager.Down, Inputs.Fire1);
+            Func<bool> o = () => !InputManager.IsInput(InputManager.Down, Inputs.Fire1);
+
+            animation.AddAnimation(o, new Animation(test, 0.25f, 0.25f));
+            animation.AddAnimation(p, new Animation(test, 0.25f, 0.25f, speed: 0.05f));
 
             //var a = AddEntity("a");
             //player.AddComponent(new Texture2DComponent("floor"));

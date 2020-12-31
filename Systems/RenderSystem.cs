@@ -66,6 +66,20 @@ namespace Joie.Systems
         //{
         //    Core._content.Unload();
         //}
+        public void System_Update(GameTime gameTime, Scene scene)
+        {
+            foreach (var entity in scene.Entities)
+            {
+                foreach (var component in entity.Components)
+                {
+                    if (component is AnimationComponent acomp)
+                    {
+                        acomp.Component_Update(gameTime);//, SceneTextures[acomp.CurrentAnimation.Texture.TextureName]);
+                    }
+                    //spriteBatch.Draw(SceneTextures[tcomp.TextureName], new Vector2(100, 100), Color.White);
+                }
+            }
+        }
 
         public void System_Render(SpriteBatch spriteBatch, Scene scene)
         {
@@ -89,7 +103,7 @@ namespace Joie.Systems
                     }
                     else if (component is AnimationComponent acomp)
                     {
-                        //acomp.Component_Draw(spriteBatch, SceneTextures[acomp.CurrentAnimation.Texture.TextureName]);
+                        acomp.Component_Draw(spriteBatch);//, SceneTextures[acomp.CurrentAnimation.Texture.TextureName]);
                     }
                         //spriteBatch.Draw(SceneTextures[tcomp.TextureName], new Vector2(100, 100), Color.White);
                 }

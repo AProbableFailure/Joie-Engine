@@ -23,6 +23,8 @@ namespace Joie.ECS
         //public Scene()
         //{ }
 
+        public abstract void Scene_ContentCanvas();
+
         public abstract void Scene_Canvas();
         //{
         //    // Add entities and whatnot here

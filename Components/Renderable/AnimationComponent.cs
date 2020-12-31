@@ -69,12 +69,16 @@ namespace Joie.Components
             }
         }
 
-        public void Component_Draw(SpriteBatch spriteBatch, Texture2D texture)
+        public void Component_Draw(SpriteBatch spriteBatch)//, Texture2D texture)
         {
             //var textureSize = new Vector2(texture.Width, texture.Height);
-            Console.WriteLine(CurrentAnimation.FrameHeight);
+            //Console.WriteLine(CurrentAnimation.FrameHeight);
 
-            spriteBatch.Draw(texture
+            //CurrentAnimation.CurrentFrame++;
+            //if (CurrentAnimation.CurrentFrame >= CurrentAnimation.FrameCount)
+            //    CurrentAnimation.CurrentFrame = 0;
+
+            spriteBatch.Draw(CurrentAnimation.TextureComponent.Texture//texture
                             , new Vector2(100, 100)
                             , CurrentAnimation.Division == DivisionMethod.ByPixel
                                 ? CurrentAnimation.SourceRectangle
@@ -117,14 +121,14 @@ namespace Joie.Components
     public class Animation
     {
         public DivisionMethod Division { get; set; }
-        public Texture2DComponent Texture { get; set; }
+        public Texture2DComponent TextureComponent { get; set; }
         public Vector2 SourceRectanglePosition { get; set; }
         //public Vector2 SourceRectangleSize { get; set; }
         public Rectangle SourceRectangle
         {
             get
             {
-                return new Rectangle((LocalSourceRectanglePosition + Texture.SourceRectanglePosition).ToPoint(), new Point((int)FrameWidth, (int)FrameHeight));
+                return new Rectangle((LocalSourceRectanglePosition + TextureComponent.SourceRectanglePosition).ToPoint(), new Point((int)FrameWidth, (int)FrameHeight));
             }
         }
         //public Rectangle SourceRectangle { get => new Rectangle((SourceRectanglePosition + Texture.SourceRectanglePosition).ToPoint()
@@ -147,13 +151,13 @@ namespace Joie.Components
 
         public Animation(Texture2DComponent texture, float xFrameSize = 1, float yFrameSize = 1, DivisionMethod division = DivisionMethod.Fractional, float speed = 0.2f)
         {
-            Texture = texture;
+            TextureComponent = texture;
 
             AnimationSpeed = speed;
 
             if (division == DivisionMethod.Fractional)
             {
-                Console.WriteLine(texture.SourceRectangleSize.X);
+                //Console.WriteLine(texture.SourceRectangleSize.X * xFrameSize);
                 FrameWidth = texture.SourceRectangleSize.X * xFrameSize;
                 FrameHeight = texture.SourceRectangleSize.Y * yFrameSize;
             }

@@ -14,12 +14,44 @@ namespace Joie.Components
     }
     public class Texture2DComponent : Component
     {
-        //public string TextureName { get; set; }
         public Texture2D Texture { get; set; }
+        public Vector2 TextureSize { get => new Vector2(Texture.Width, Texture.Height); }
         public DivisionMethod Division { get; set; }
-        public Vector2 SourceRectanglePosition { get; set; }
-        public Vector2 SourceRectangleSize { get; set; }
-        public Rectangle SourceRectangle { get => new Rectangle(SourceRectanglePosition.ToPoint(), SourceRectangleSize.ToPoint()); }//(SourceRectanglePosition.X, SourceRectangle.Y, (int)SourceRectangleSize.X, (int)SourceRectangleSize.Y); }
+        private Vector2 _sourceRectanglePosition;
+        public Vector2 SourceRectanglePosition 
+        { 
+            get
+            {
+                return Division == DivisionMethod.ByPixel
+                    ? _sourceRectanglePosition
+                    : TextureSize * _sourceRectanglePosition;
+            }
+            set => _sourceRectanglePosition = value;
+        }
+        private Vector2 _sourceRectangleSize;
+        public Vector2 SourceRectangleSize
+        {
+            get
+            {
+                return Division == DivisionMethod.ByPixel
+                    ? _sourceRectangleSize
+                    : TextureSize * _sourceRectangleSize;
+            }
+            set => _sourceRectangleSize = value;
+        }
+        public Rectangle SourceRectangle 
+        {
+            get
+            {
+                return new Rectangle(SourceRectanglePosition.ToPoint(), SourceRectangleSize.ToPoint());
+                //var textureSize = new Vector2(Texture.Width, Texture.Height);
+                //return Division == DivisionMethod.ByPixel
+                //    ? new Rectangle(SourceRectanglePosition.ToPoint(), SourceRectangleSize.ToPoint())
+                //    : new Rectangle((TextureSize * SourceRectanglePosition).ToPoint(), (TextureSize * SourceRectangleSize).ToPoint());
+            }
+        }
+        
+        //(SourceRectanglePosition.X, SourceRectangle.Y, (int)SourceRectangleSize.X, (int)SourceRectangleSize.Y); }
 
         public Texture2DComponent(string textureName, float xPos = 0, float yPos = 0, float xSize = 1, float ySize = 1, DivisionMethod division = DivisionMethod.Fractional)
         {
@@ -29,16 +61,19 @@ namespace Joie.Components
 
             SourceRectanglePosition = new Vector2(xPos, yPos);
             SourceRectangleSize = new Vector2(xSize, ySize);
+
+            Console.WriteLine(SourceRectangleSize);
         }
 
         public void Component_Draw(SpriteBatch spriteBatch)//, Texture2D texture)
         {
-            var textureSize = new Vector2(Texture.Width, Texture.Height);
+            //var textureSize = new Vector2(Texture.Width, Texture.Height);
             spriteBatch.Draw(Texture
                             , new Vector2(100, 100)
-                            , Division == DivisionMethod.ByPixel
-                                ? SourceRectangle
-                                : new Rectangle((textureSize * SourceRectanglePosition).ToPoint(), (textureSize * SourceRectangleSize).ToPoint())
+                            , SourceRectangle
+                            //, Division == DivisionMethod.ByPixel
+                            //    ? SourceRectangle
+                            //    : new Rectangle((textureSize * SourceRectanglePosition).ToPoint(), (textureSize * SourceRectangleSize).ToPoint())
                             , Color.White);
         }
     }

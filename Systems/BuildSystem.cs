@@ -24,8 +24,9 @@ namespace Joie.Systems
 
         public void System_BuildScene(Scene scene)
         {
-            scene.Scene_Canvas();
+            scene.Scene_ContentCanvas();
             System_LoadContent(scene);
+            scene.Scene_Canvas();
         }
 
         public void System_LoadContent(Scene scene)

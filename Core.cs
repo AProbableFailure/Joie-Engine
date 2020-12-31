@@ -74,8 +74,10 @@ namespace Joie
 
             if (InputManager.IsKey(InputManager.Triggered, Microsoft.Xna.Framework.Input.Keys.O))
                 ChangeScene(new TestingScene());
-            if (InputManager.IsKey(InputManager.Triggered, Microsoft.Xna.Framework.Input.Keys.P))
-                ChangeScene(new TestingScene2());
+            //if (InputManager.IsKey(InputManager.Triggered, Microsoft.Xna.Framework.Input.Keys.P))
+            //    ChangeScene(new TestingScene2());
+            Renderer.System_Update(gameTime, CurrentScene);
+
 
             base.Update(gameTime);
         }
