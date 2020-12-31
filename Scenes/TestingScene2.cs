@@ -8,9 +8,9 @@ using System.Text;
 
 namespace Joie.Scenes
 {
-    public class TestingScene : Scene
+    public class TestingScene2 : Scene
     {
-        public override string SceneName { get; set; } = "First";
+        public override string SceneName { get; set; } = "Second";
         //public override void BuildScene()
         //{
         //    //var background = AddEntity("background");
@@ -39,7 +39,7 @@ namespace Joie.Scenes
         {
             AddContent(ContentType.Texture2D, "player", "SmileyWalk");
             //AddContent(ContentType.Texture2D, "moon", "moon_PNG36");
-            AddContent(ContentType.Texture2D, "floor", "Test_Floor");
+            //AddContent(ContentType.Texture2D, "floor", "Test_Floor");
             //base.SceneContentCanvas();
         }
     }

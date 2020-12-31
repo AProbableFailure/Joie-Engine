@@ -6,13 +6,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
+using Joie.Structures;
+using Joie.Systems;
 
 namespace Joie.ECS
 {
-    public class Scene
+    public abstract class Scene
     {
+        public virtual string SceneName { get; set; }
         public List<Entity> Entities { get; set; } = new List<Entity>();
         public SceneCamera SceneCamera { get; set; } = new SceneCamera();
+
+        //public Dictionary<string, Texture2D> SpaceTextures = new Dictionary<string, Texture2D>(); //name, texture
+        public Dictionary<(ContentType, string), string> SceneContentPaths = new Dictionary<(ContentType, string), string>(); //name, path
 
         //private Effect SceneEffect;
 
@@ -21,159 +27,96 @@ namespace Joie.ECS
 
         public virtual void SceneCanvas()
         {
+            // Add entities and whatnot here
 
+            //LoadSceneContent(Core._content);
         }
 
-        public void InitializeScene(ContentManager content)
+        public virtual void SceneContentCanvas()//(ContentManager content)
         {
-            foreach (var entity in Entities)
-            {
-                entity.Components.InitializeComponents();
-                entity.Components.LoadContentComponents(content);
-            }
-            //LoadContentScene(content);
+
         }
-        public void LoadContentScene(ContentManager content)
+
+        public void AddContent(ContentType contentType, string name, string filePath) //where T : Texture2D
         {
-            foreach (var entity in Entities)
-            {
-                entity.Components.LoadContentComponents(content);
-            }
-        }
-        public void UpdateScene(GameTime gameTime)
-        {
-            foreach (var entity in Entities)
-            {
-                entity.Components.UpdateComponents(gameTime);
-            }
-        }
-        public void DrawScene(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Begin();
-            foreach (var entity in Entities)
-            {
-                entity.Components.DrawComponents(spriteBatch);
-            }
-            spriteBatch.End();
-        }
-
-        public void ChangeScene(Scene changeScene, ContentManager content)
-        {
-            Game1.CurrentScene = changeScene;
-            changeScene.SceneCanvas();
-            changeScene.InitializeScene(content);
-            //changeScene.LoadContentScene(Content);
+            //switch (contentType)
+            //{
+            //    case ContentType.Texture2D:
+            //        SpaceContentPaths.Add((contentType, name), filePath);
+            //        return;
+            //    //case ContentTypes.SoundEffect:
+            //    //SpaceTexturePaths.Add
+            //    default:
+            //        return;
+            //}
+            ////if (contentType == ContentTypes.Texture2D)
+            ////    SpaceTexturePaths.Add(name, filePath);
+            if (!SceneContentPaths.ContainsKey((contentType, name)))
+                SceneContentPaths.Add((contentType, name), filePath);
         }
 
 
 
-        public Entity AddEntity(string name)
-        {
-            var entity = new Entity();
-            Entities.Add(entity);
-            entity.OnAddEntity(name, this);
-            return entity;
-        }
-        public Entity AddEntity<T>(string name, T entity) where T : Entity
-        {
-            Entities.Add(entity);
-            entity.OnAddEntity(name, this);
-            return entity;
-        }
-        public void RemoveEntity(Entity entity) => Entities.Remove(entity);
 
 
-        //-----------------
-        // Entity Methods
-        //-----------------
 
-        //public bool HasEntity(uint entityID)
-        //    => Entities.Contains(entityID);
-        //public string GetEntityNameByID(uint entityID)
+        //public void InitializeScene(ContentManager content)
         //{
-        //    if (EntityNameByID.ContainsKey(entityID))
-        //        return EntityNameByID[entityID];
-        //    return null;
+        //    foreach (var entity in Entities)
+        //    {
+        //        entity.Components.InitializeComponents();
+        //        entity.Components.LoadContentComponents(content);
+        //    }
+        //    //LoadContentScene(content);
         //}
-        //public uint GetEntityIDByName(string name)
+        //public void LoadContentScene(ContentManager content)
         //{
-        //    return EntityNameByID.KeyByValue(name);
+        //    foreach (var entity in Entities)
+        //    {
+        //        entity.Components.LoadContentComponents(content);
+        //    }
         //}
-        //public uint AddEntity(string name)
+        //public void UpdateScene(GameTime gameTime)
         //{
-        //    var entityID = IDGenerator.ID;
-        //    Entities.Add(entityID);
-        //    EntityNameByID.Add(entityID, name);
-        //    return entityID;
+        //    foreach (var entity in Entities)
+        //    {
+        //        entity.Components.UpdateComponents(gameTime);
+        //    }
         //}
-        //public uint GetOrAddEntity(string name)
+        //public void DrawScene(SpriteBatch spriteBatch)
         //{
-        //    uint? temp = GetEntityIDByName(name);
-        //    temp ??= AddEntity(name);
-        //    return temp.Value;
-        //}
-        //public void RemoveEntity(uint entityID)
-        //{
-        //    Entities.Remove(entityID);
-        //    EntityNameByID.Remove(entityID);
-        //    foreach (var component in Components)
-        //        component.HandleEntityRemoval(entityID);
-        //}
-        /*public bool TryGetEntityNameByID(uint entityID, out string name)
-        {
-            name = GetEntityNameByID(entityID);
-            return name != null;
-        }
-        public bool TryGetEntityIDByName(string name, uint? entityID)
-        {
-            entityID = GetEntityIDByName(name);
-            return entityID != null;
-        }*/
-
-
-
-        //--------------------
-        // Component Methods
-        //--------------------
-
-        // Has component
-        //public bool SceneHasComponent<T>() where T : Component
-        //    => SceneGetComponent<T>() != null;
-
-        //// Get component
-        //public T SceneGetComponent<T>() where T : Component
-        //{
-        //    foreach (var component in Components)
-        //        if (component is T TComponent)
-        //            return TComponent;
-        //    return null;
+        //    spriteBatch.Begin();
+        //    foreach (var entity in Entities)
+        //    {
+        //        entity.Components.DrawComponents(spriteBatch);
+        //    }
+        //    spriteBatch.End();
         //}
 
-        //// Add component
-        //public T SceneAddComponent<T>(T component) where T : Component
+        //public void ChangeScene(Scene changeScene, ContentManager content)
         //{
-        //    if (SceneHasComponent<T>())
-        //        Components.Add(component);
-        //    return component;
+        //    Game1.CurrentScene = changeScene;
+        //    changeScene.SceneCanvas();
+        //    changeScene.InitializeScene(content);
+        //    //changeScene.LoadContentScene(Content);
         //}
-        //public T SceneAddComponent<T>() where T : Component, new()
-        //    => SceneAddComponent(new T());
 
-        //// Get or Add component
-        //public T SceneGetOrAddComponent<T>(T component) where T : Component
-        //    => SceneGetComponent<T>() ?? SceneAddComponent(component);
-        //public T SceneGetOrAddComponent<T>() where T : Component, new()
-        //    => SceneGetComponent<T>() ?? SceneAddComponent(new T());
 
-        //// Remove component
-        //public void SceneRemoveComponent<T>() where T : Component
-        //    => Components.Remove(SceneGetComponent<T>());
 
-        //// Try to Get component
-        //public bool SceneTryGetComponent<T>(out T component) where T : Component
+        //public Entity AddEntity(string name)
         //{
-        //    component = SceneGetComponent<T>();
-        //    return component != null;
+        //    var entity = new Entity();
+        //    Entities.Add(entity);
+        //    entity.OnAddEntity(name, this);
+        //    return entity;
         //}
+        //public Entity AddEntity<T>(string name, T entity) where T : Entity
+        //{
+        //    Entities.Add(entity);
+        //    entity.OnAddEntity(name, this);
+        //    return entity;
+        //}
+        //public void RemoveEntity(Entity entity) => Entities.Remove(entity);
+
     }
 }
