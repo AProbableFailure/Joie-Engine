@@ -11,9 +11,9 @@ using System.Text;
 namespace Joie.Components
 {
 
-    public class AnimationComponent : Component
+    public class AnimationComponent : Component, /*IBuildableComponent,*/ IRenderableComponent, IUpdatableComponent
     {
-        //public string TextureName
+        private TransformComponent Transform;
         public Dictionary<Func<bool>, Animation> Animations = new Dictionary<Func<bool>, Animation>();
         private Animation _currentAnimation;
         public Animation CurrentAnimation 
@@ -25,12 +25,14 @@ namespace Joie.Components
 
         public AnimationComponent(bool register = true) : base(register)
         {
-            //Core.Renderer.Register(this);
+            Transform = Entity.GetOrAddComponent(new TransformComponent(registered: false));
         }
 
         public override void RegisterComponent()
         {
-            Core.Renderer.Register(this);
+            //Core.Builder.RegisterBuildable(this);
+            Core.Renderer.RegisterUpdatable(this);
+            Core.Renderer.RegisterRenderable(this);
         }
 
         public void AddAnimation(Func<bool> trigger, Animation animation)
@@ -39,12 +41,8 @@ namespace Joie.Components
         public void SetAnimation()
         {
             foreach (var animation in Animations)
-            {
                 if (animation.Key())
-                {
                     Play(animation.Value);
-                }
-            }
         }
 
         public void Play(Animation animation)
@@ -53,9 +51,9 @@ namespace Joie.Components
                 return;
 
             CurrentAnimation = animation;
-            CurrentAnimation.CurrentFrame = 0;
-
-            timer = 0f;
+            Stop();
+            //CurrentAnimation.CurrentFrame = 0;
+            //timer = 0f;
         }
 
         public void Stop()
@@ -83,57 +81,24 @@ namespace Joie.Components
 
         public void Component_Draw(SpriteBatch spriteBatch)//, Texture2D texture)
         {
-            //var textureSize = new Vector2(texture.Width, texture.Height);
-            //Console.WriteLine(CurrentAnimation.FrameHeight);
-
-            //CurrentAnimation.CurrentFrame++;
-            //if (CurrentAnimation.CurrentFrame >= CurrentAnimation.FrameCount)
-            //    CurrentAnimation.CurrentFrame = 0;
-
-            spriteBatch.Draw(CurrentAnimation.TextureComponent.Texture//texture
-                            , new Vector2(100, 100)
-                            , CurrentAnimation.SourceRectangle//new Rectangle(C
-                            
-                            //SourceRectangle
-                              //CurrentAnimation.Division == DivisionMethod.ByPixel
-                              //  ? CurrentAnimation.SourceRectangle
-                              //  : new Rectangle((textureSize * SourceRectanglePosition).ToPoint(), (textureSize * SourceRectangleSize).ToPoint())
+            spriteBatch.Draw(CurrentAnimation.TextureComponent.Texture
+                            //, new Vector2(100, 100)
+                            //, Entity.GetOrAddComponent(new TransformComponent(registered: false)).Position
+                            , Transform.Position
+                            , CurrentAnimation.SourceRectangle
                             , Color.White);
-
-
-            //spriteBatch.Draw(CurrentAnimation.Texture
-            //                , ParentEntity.Position
-            //                , new Rectangle(CurrentAnimation.FrameWidth * (CurrentAnimation.CurrentFrame % CurrentAnimation.Columns)
-            //                                , CurrentAnimation.FrameHeight * (int)MathF.Floor(CurrentAnimation.CurrentFrame / CurrentAnimation.Columns)
-            //                                , CurrentAnimation.FrameWidth
-            //                                , CurrentAnimation.FrameHeight)
-            //                , Color.White
-            //                , 0f, Vector2.Zero
-            //                , 1
-            //                , ParentEntity.FacingRight ? SpriteEffects.None : SpriteEffects.FlipHorizontally
-            //                , 1); //Height);
-
-
-            //spriteBatch.Draw(CurrentAnimation.SpriteSheet
-            //                , ParentEntity.Position
-            //                , new Rectangle(CurrentAnimation.FrameWidth * (CurrentAnimation.CurrentFrame % CurrentAnimation.Columns)
-            //                                , CurrentAnimation.FrameHeight * (int)MathF.Floor(CurrentAnimation.CurrentFrame / CurrentAnimation.Columns)
-            //                                , CurrentAnimation.FrameWidth
-            //                                , CurrentAnimation.FrameHeight)
-            //                , Color.White
-            //                , 0f, Vector2.Zero
-            //                , 1
-            //                , ParentEntity.FacingRight ? SpriteEffects.None : SpriteEffects.FlipHorizontally
-            //                , 1); //Height);
         }
+
+        //public void Component_Initialize()
+        //{
+        //    Transform = Entity.GetOrAddComponent(new TransformComponent(registered: false));
+        //}
     }
 
     public class Animation
     {
-        //public DivisionMethod Division { get; set; }
         public Texture2DComponent TextureComponent { get; set; }
         public Vector2 SourceRectanglePosition { get; set; }
-        //public Vector2 SourceRectangleSize { get; set; }
         public Rectangle SourceRectangle
         {
             get
@@ -141,8 +106,6 @@ namespace Joie.Components
                 return new Rectangle((LocalSourceRectanglePosition + TextureComponent.SourceRectanglePosition).ToPoint(), new Point((int)FrameWidth, (int)FrameHeight));
             }
         }
-        //public Rectangle SourceRectangle { get => new Rectangle((SourceRectanglePosition + Texture.SourceRectanglePosition).ToPoint()
-        //    , SourceRectangleSize.ToPoint()); }
         public Vector2 LocalSourceRectanglePosition
         {
             get => new Vector2(FrameWidth * (CurrentFrame % Columns)

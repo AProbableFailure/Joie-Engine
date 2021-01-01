@@ -25,6 +25,7 @@ namespace Joie
 
         public static BuildSystem Builder;// = new BuildSystem();
         public static RenderSystem Renderer;// = new RenderSystem();
+        public static PhysicsSystem Physics;
 
         public Core(int defaultViewportX = 2650, int defaultViewportY = 1440)
         {
@@ -41,6 +42,7 @@ namespace Joie
         {
             WindowManager.ViewportSize = _defaultViewportSize;
 
+            Physics = new PhysicsSystem();
             Renderer = new RenderSystem();
             Builder = new BuildSystem();//BuildSystem(Renderer);
 
@@ -62,19 +64,21 @@ namespace Joie
             if (InputManager.IsInput(InputManager.Down, Inputs.Exit))
                 Exit();
 
-            if (InputManager.IsInput(InputManager.Triggered, Inputs.Up))
-                Console.WriteLine("Up");
-            if (InputManager.IsInput(InputManager.Triggered, Inputs.Down))
-                Console.WriteLine("Down");
-            if (InputManager.IsInput(InputManager.Triggered, Inputs.Left))
-                Console.WriteLine("Left");
-            if (InputManager.IsInput(InputManager.Triggered, Inputs.Right))
-                Console.WriteLine("Right");
+            //if (InputManager.IsInput(InputManager.Triggered, Inputs.Up))
+            //    Console.WriteLine("Up");
+            //if (InputManager.IsInput(InputManager.Triggered, Inputs.Down))
+            //    Console.WriteLine("Down");
+            //if (InputManager.IsInput(InputManager.Triggered, Inputs.Left))
+            //    Console.WriteLine("Left");
+            //if (InputManager.IsInput(InputManager.Triggered, Inputs.Right))
+            //    Console.WriteLine("Right");
 
             if (InputManager.IsKey(InputManager.Triggered, Microsoft.Xna.Framework.Input.Keys.O))
                 ChangeScene(new TestingScene());
             //if (InputManager.IsKey(InputManager.Triggered, Microsoft.Xna.Framework.Input.Keys.P))
             //    ChangeScene(new TestingScene2());
+
+            Physics.System_Update(gameTime, CurrentScene);
             Renderer.System_Update(gameTime, CurrentScene);
 
 

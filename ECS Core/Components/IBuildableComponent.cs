@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Joie.ECS
 {
-    interface IInitializableComponent
+    public interface IBuildableComponent
     {
-        void InitializeComponent();
+        void Component_Initialize();
     }
 }

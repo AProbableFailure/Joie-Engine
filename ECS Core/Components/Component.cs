@@ -9,11 +9,13 @@ namespace Joie.ECS
         //public List<uint> Entities = new List<uint>();
         public Entity Entity { get; set; }
         public bool Enabled { get; set; } = true;
+        public bool Registered { get; set; }
         public virtual void OnAddComponent(Entity entity) => Entity = entity;
 
-        public Component(bool register)
+        public Component(bool registered)
         {
-            if (register)
+            Registered = registered;
+            if (registered)
                 RegisterComponent();
         }
 

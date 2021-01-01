@@ -12,10 +12,10 @@ namespace Joie.ECS.Utilities
         Entity _entity;
 
         List<Component> _components = new List<Component>();
-        List<IInitializableComponent> _initializableComponents = new List<IInitializableComponent>();
+        List<IBuildableComponent> _initializableComponents = new List<IBuildableComponent>();
         List<IContentLoadableComponent> _loadableComponents = new List<IContentLoadableComponent>();
         List<IUpdatableComponent> _updatableComponents = new List<IUpdatableComponent>();
-        List<IDrawableComponent> _renderableComponents = new List<IDrawableComponent>();
+        List<IRenderableComponent> _renderableComponents = new List<IRenderableComponent>();
 
         internal List<Component> _componentsToAdd = new List<Component>();
         List<Component> _componentsToRemove = new List<Component>();
@@ -65,13 +65,13 @@ namespace Joie.ECS.Utilities
         void HandleRemove(Component component)
         {
             //_entity.ParentScene.RenderableComponents.Remove(component as RenderableComponent);
-            if (component is IInitializableComponent initializable)
+            if (component is IBuildableComponent initializable)
                 _initializableComponents.Remove(initializable);
             if (component is IContentLoadableComponent loadable)
                 _loadableComponents.Remove(loadable);
             if (component is IUpdatableComponent updatable)
                 _updatableComponents.Remove(updatable);
-            if (component is IDrawableComponent drawable)
+            if (component is IRenderableComponent drawable)
                 _renderableComponents.Remove(drawable);
 
             //component.OnRemovedFromEntity();
@@ -109,11 +109,11 @@ namespace Joie.ECS.Utilities
             {
                 foreach (var component in _componentsToAdd)
                 {
-                    if (component is IInitializableComponent initializable)
+                    if (component is IBuildableComponent initializable)
                         _initializableComponents.Add(initializable);
                     if (component is IContentLoadableComponent loadable)
                         _loadableComponents.Add(loadable);
-                    if (component is IDrawableComponent drawable)
+                    if (component is IRenderableComponent drawable)
                         _renderableComponents.Add(drawable);
                     if (component is IUpdatableComponent updatable)
                         _updatableComponents.Add(updatable);
@@ -145,7 +145,7 @@ namespace Joie.ECS.Utilities
 
             foreach (var component in _initializableComponents)
                 if ((component as Component).Enabled)
-                    component.InitializeComponent();
+                    component.Component_Initialize();
         }
 
         public void LoadContentComponents(ContentManager content)
@@ -163,7 +163,7 @@ namespace Joie.ECS.Utilities
 
             foreach (var component in _updatableComponents)
                 if ((component as Component).Enabled)
-                    component.UpdateComponent(gameTime);
+                    component.Component_Update(gameTime);
         }
 
         public void DrawComponents(SpriteBatch spriteBatch)
@@ -172,7 +172,7 @@ namespace Joie.ECS.Utilities
 
             foreach (var component in _renderableComponents)
                 if ((component as Component).Enabled)
-                    component.DrawComponent(spriteBatch);
+                    component.Component_Draw(spriteBatch);
         }
     }
 }

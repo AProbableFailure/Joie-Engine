@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Joie.ECS
 {
-    interface IUpdatableComponent
+    public interface IUpdatableComponent
     {
-        void UpdateComponent(Microsoft.Xna.Framework.GameTime gameTime);
+        void Component_Update(Microsoft.Xna.Framework.GameTime gameTime);
     }
 }

@@ -11,23 +11,38 @@ namespace Joie.Systems
     public class BuildSystem : ECSSystem
     {
         //public RenderSystem _renderer;
-
+        //
         //public Dictionary<string, Texture2D> SceneTextures = new Dictionary<string, Texture2D>(); // name, Texture2D
         //public Dictionary<string, SoundEffect> SceneAudio = new Dictionary<string, SoundEffect>(); // name, SoundEffect
-
+        //
         //public Effect SceneShader;
-
+        //
         //public BuildSystem(RenderSystem renderer)
         //{
         //    _renderer = renderer;
         //}
         //public List<Component> RegisteredComponents = new List<Component>();
 
+        private List<IBuildableComponent> RegisteredBuildableComponents = new List<IBuildableComponent>();
+
         public void System_BuildScene(Scene scene)
         {
             scene.Scene_ContentCanvas();
             System_LoadContent(scene);
             scene.Scene_Canvas();
+            System_BuildComponents(scene);
+        }
+
+        public void System_BuildComponents(Scene scene)
+        {
+            //foreach (var initializable in RegisteredBuildableComponents)
+            //{
+            //    initializable.Component_Initialize();
+            //}
+            for (int i = 0; i < RegisteredBuildableComponents.Count; i++)
+            {
+                RegisteredBuildableComponents[i].Component_Initialize();
+            }
         }
 
         public void System_LoadContent(Scene scene)
@@ -73,5 +88,8 @@ namespace Joie.Systems
             System_UnloadContent();
             System_BuildScene(Core.CurrentScene);
         }
+
+        public void RegisterBuildable(IBuildableComponent buildable)
+            => RegisteredBuildableComponents.Add(buildable);
     }
 }

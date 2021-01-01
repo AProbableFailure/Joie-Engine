@@ -21,54 +21,39 @@ namespace Joie.Systems
 
     public class RenderSystem : ECSSystem
     {
+        public List<IUpdatableComponent> RegisteredUpdatableComponents = new List<IUpdatableComponent>();
+        public List<IRenderableComponent> RegisteredRenderableComponents = new List<IRenderableComponent>();
+
         public Dictionary<string, Texture2D> SceneTextures = new Dictionary<string, Texture2D>(); // name, Texture2D
         //public Dictionary<string, SoundEffect> SceneAudio = new Dictionary<string, SoundEffect>(); // name, SoundEffect
 
         public Effect SceneShader;
+
         public void System_Update(GameTime gameTime, Scene scene)
         {
             scene.SceneCamera.UpdateSceneCamera(gameTime);
-            foreach (var component in RegisteredComponents)
+            //foreach (var component in RegisteredUpdatableComponents)
+            //    component.Component_Update(gameTime);
+            for (int i = 0; i < RegisteredUpdatableComponents.Count; i++)
             {
-                if (component is AnimationComponent acomp)
-                    acomp.Component_Update(gameTime);
+                RegisteredUpdatableComponents[i].Component_Update(gameTime);
             }
-            //foreach (var entity in scene.Entities)
-            //{
-            //    foreach (var component in entity.Components)
-            //    {
-            //        if (component is AnimationComponent acomp)
-            //        {
-            //            acomp.Component_Update(gameTime);//, SceneTextures[acomp.CurrentAnimation.Texture.TextureName]);
-            //        }
-            //        //spriteBatch.Draw(SceneTextures[tcomp.TextureName], new Vector2(100, 100), Color.White);
-            //    }
-            //}
         }
 
         public void System_Render(SpriteBatch spriteBatch, Scene scene)
         {
             spriteBatch.Begin(transformMatrix: scene.SceneCamera.RawSceneCameraMatrix);
 
-            //foreach (var entity in scene.Entities)
+            //foreach (var component in RegisteredRenderableComponents)//RegisteredComponents)
             //{
-            //    foreach (var component in entity.Components)
-            //    {
-            //        if (component is Texture2DComponent tcomp)
-            //            tcomp.Component_Draw(spriteBatch);//, SceneTextures[tcomp.TextureName]);
-            //        else if (component is AnimationComponent acomp)
-            //            acomp.Component_Draw(spriteBatch);//, SceneTextures[acomp.CurrentAnimation.Texture.TextureName]);
-            //            //spriteBatch.Draw(SceneTextures[tcomp.TextureName], new Vector2(100, 100), Color.White);
-            //    }
+            //    //Console.WriteLine("Updatable    " + RegisteredUpdatableComponents.Count);
+            //    //Console.WriteLine("Drawable    " + RegisteredDrawableComponents.Count);
+            //    component.Component_Draw(spriteBatch);
             //}
-            foreach (var component in RegisteredComponents)
+
+            for (int i = 0; i < RegisteredRenderableComponents.Count; i++)
             {
-                Console.WriteLine(RegisteredComponents.Count);
-                if (component is Texture2DComponent tcomp)
-                    tcomp.Component_Draw(spriteBatch);//, SceneTextures[tcomp.TextureName]);
-                else if (component is AnimationComponent acomp)
-                    acomp.Component_Draw(spriteBatch);//, SceneTextures[acomp.CurrentAnimation.Texture.TextureName]);
-                                                      //spriteBatch.Draw(SceneTextures[tcomp.TextureName], new Vector2(100, 100), Color.White);
+                RegisteredRenderableComponents[i].Component_Draw(spriteBatch);
             }
 
             spriteBatch.End();
@@ -81,5 +66,11 @@ namespace Joie.Systems
             //System_UnloadContent();
             //System_LoadContent(Core.CurrentScene);
         }
+
+        public void RegisterUpdatable(IUpdatableComponent updatable)
+            => RegisteredUpdatableComponents.Add(updatable);
+
+        public void RegisterRenderable(IRenderableComponent renderable)
+            => RegisteredRenderableComponents.Add(renderable);
     }
 }

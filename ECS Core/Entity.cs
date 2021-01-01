@@ -38,12 +38,15 @@ namespace Joie.ECS
         public T AddComponent<T>(T component) where T : Component
         {
             Components.Add(component);
+            component.OnAddComponent(this);
             return component;
         }
         //public T GetOrAddComponent<T>() where T : Component, new() 
         //    => Components.GetComponent<T>(true) ?? AddComponent<T>();
         public T GetOrAddComponent<T>() where T : Component, new()
             => GetComponent<T>() ?? AddComponent<T>();
+        public T GetOrAddComponent<T>(T component) where T : Component
+            => GetComponent<T>() ?? AddComponent<T>(component);
         public void RemoveComponent<T>(T component) where T : Component 
             => Components.Remove(component);
         public void RemoveComponent<T>() where T : Component 
