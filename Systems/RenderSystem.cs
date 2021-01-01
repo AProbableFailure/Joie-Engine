@@ -25,88 +25,50 @@ namespace Joie.Systems
         //public Dictionary<string, SoundEffect> SceneAudio = new Dictionary<string, SoundEffect>(); // name, SoundEffect
 
         public Effect SceneShader;
-
-        //public void System_LoadContent(Scene scene)
-        //{
-        //    scene.Scene_ContentCanvas();
-        //    System_LoadContentPaths(scene, Core._content);
-        //}
-
-        //private void System_LoadContentPaths(Scene scene, ContentManager content)
-        //{
-        //    // Clear all asset 
-        //    // TODO: MAKE IT SO THAT IT DOES NOT CLEAR ON SCENE CHANGE IF CONTENT ALREADY EXISTS IN A LIST
-        //    SceneTextures.Clear();
-        //    //SceneAudio.Clear();
-        //    SceneShader = null;
-
-        //    // Setting shader
-        //    //if (scene.SceneShaderPath != null)
-        //    //    SceneShader = content.Load<Effect>(scene.SceneShaderPath);
-            
-
-        //    //// Loading all content from paths while organizing them to their respective dictionaries
-        //    //foreach (var kvp in scene.SceneContentPaths)
-        //    //{
-        //    //    switch (kvp.Key.Item1)
-        //    //    {
-        //    //        case ContentType.Texture2D:
-        //    //            SceneTextures.Add(kvp.Key.Item2, content.Load<Texture2D>(kvp.Value));
-        //    //            break;
-        //    //        case ContentType.SoundEffect:
-        //    //            SceneAudio.Add(kvp.Key.Item2, content.Load<SoundEffect>(kvp.Value));
-        //    //            break;
-        //    //        default:
-        //    //            break;
-        //    //    }
-        //    //}
-        //}
-
-        //public void System_UnloadContent()
-        //{
-        //    Core._content.Unload();
-        //}
         public void System_Update(GameTime gameTime, Scene scene)
         {
-            foreach (var entity in scene.Entities)
+            scene.SceneCamera.UpdateSceneCamera(gameTime);
+            foreach (var component in RegisteredComponents)
             {
-                foreach (var component in entity.Components)
-                {
-                    if (component is AnimationComponent acomp)
-                    {
-                        acomp.Component_Update(gameTime);//, SceneTextures[acomp.CurrentAnimation.Texture.TextureName]);
-                    }
-                    //spriteBatch.Draw(SceneTextures[tcomp.TextureName], new Vector2(100, 100), Color.White);
-                }
+                if (component is AnimationComponent acomp)
+                    acomp.Component_Update(gameTime);
             }
+            //foreach (var entity in scene.Entities)
+            //{
+            //    foreach (var component in entity.Components)
+            //    {
+            //        if (component is AnimationComponent acomp)
+            //        {
+            //            acomp.Component_Update(gameTime);//, SceneTextures[acomp.CurrentAnimation.Texture.TextureName]);
+            //        }
+            //        //spriteBatch.Draw(SceneTextures[tcomp.TextureName], new Vector2(100, 100), Color.White);
+            //    }
+            //}
         }
 
         public void System_Render(SpriteBatch spriteBatch, Scene scene)
         {
-            spriteBatch.Begin();
+            spriteBatch.Begin(transformMatrix: scene.SceneCamera.RawSceneCameraMatrix);
 
-            foreach (var entity in scene.Entities)
+            //foreach (var entity in scene.Entities)
+            //{
+            //    foreach (var component in entity.Components)
+            //    {
+            //        if (component is Texture2DComponent tcomp)
+            //            tcomp.Component_Draw(spriteBatch);//, SceneTextures[tcomp.TextureName]);
+            //        else if (component is AnimationComponent acomp)
+            //            acomp.Component_Draw(spriteBatch);//, SceneTextures[acomp.CurrentAnimation.Texture.TextureName]);
+            //            //spriteBatch.Draw(SceneTextures[tcomp.TextureName], new Vector2(100, 100), Color.White);
+            //    }
+            //}
+            foreach (var component in RegisteredComponents)
             {
-                foreach (var component in entity.Components)
-                {
-                    if (component is Texture2DComponent tcomp)
-                    {
-                        tcomp.Component_Draw(spriteBatch);//, SceneTextures[tcomp.TextureName]);
-                        //var texture = SceneTextures[tcomp.TextureName];
-                        //var textureSize = new Vector2(texture.Width, texture.Height);
-                        //spriteBatch.Draw(texture//SceneTextures[tcomp.TextureName]
-                        //                , new Vector2(100, 100)
-                        //                , tcomp.Division == DivisionMethod.ByPixel
-                        //                    ? tcomp.SourceRectangle
-                        //                    : new Rectangle((textureSize * tcomp.SourceRectanglePosition).ToPoint(), (textureSize * tcomp.SourceRectangleSize).ToPoint())
-                        //                , Color.White);
-                    }
-                    else if (component is AnimationComponent acomp)
-                    {
-                        acomp.Component_Draw(spriteBatch);//, SceneTextures[acomp.CurrentAnimation.Texture.TextureName]);
-                    }
-                        //spriteBatch.Draw(SceneTextures[tcomp.TextureName], new Vector2(100, 100), Color.White);
-                }
+                Console.WriteLine(RegisteredComponents.Count);
+                if (component is Texture2DComponent tcomp)
+                    tcomp.Component_Draw(spriteBatch);//, SceneTextures[tcomp.TextureName]);
+                else if (component is AnimationComponent acomp)
+                    acomp.Component_Draw(spriteBatch);//, SceneTextures[acomp.CurrentAnimation.Texture.TextureName]);
+                                                      //spriteBatch.Draw(SceneTextures[tcomp.TextureName], new Vector2(100, 100), Color.White);
             }
 
             spriteBatch.End();

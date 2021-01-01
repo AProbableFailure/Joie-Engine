@@ -21,6 +21,7 @@ namespace Joie.Systems
         //{
         //    _renderer = renderer;
         //}
+        //public List<Component> RegisteredComponents = new List<Component>();
 
         public void System_BuildScene(Scene scene)
         {

@@ -10,6 +10,14 @@ namespace Joie.ECS
         public Entity Entity { get; set; }
         public bool Enabled { get; set; } = true;
         public virtual void OnAddComponent(Entity entity) => Entity = entity;
+
+        public Component(bool register)
+        {
+            if (register)
+                RegisterComponent();
+        }
+
+        public abstract void RegisterComponent();
         //public abstract void HandleEntityAddition(uint entityID);
         //public abstract void HandleEntityRemoval(uint entityID);
 

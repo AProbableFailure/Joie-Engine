@@ -20,6 +20,7 @@ namespace Joie.ECS
         public Dictionary<(ContentType, string), string> SceneContentPaths = new Dictionary<(ContentType, string), string>(); // (type, name), path
         public string SceneShaderPath { get; set; } = null;
 
+
         //public Scene()
         //{ }
 
@@ -41,6 +42,14 @@ namespace Joie.ECS
 
         public void SetShader(string filepath) 
             => SceneShaderPath = filepath;
+
+
+        public void ReregisterComponents()
+        {
+
+        }
+
+
 
         public Entity AddEntity(string name)
         {

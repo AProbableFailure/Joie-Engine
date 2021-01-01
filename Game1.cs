@@ -12,7 +12,7 @@ namespace Joie
 {
     public class Game1 : Core
     {
-        public Game1() : base(1280, 720)
+        public Game1() : base(2560, 1440) //1280 720
         {
 
         }

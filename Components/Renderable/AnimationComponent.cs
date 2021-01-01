@@ -1,4 +1,6 @@
 ﻿using Joie.ECS;
+using Joie.Extensions;
+using Joie.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -20,6 +22,16 @@ namespace Joie.Components
             set => _currentAnimation = value;
         }
         private float timer = 0f;
+
+        public AnimationComponent(bool register = true) : base(register)
+        {
+            //Core.Renderer.Register(this);
+        }
+
+        public override void RegisterComponent()
+        {
+            Core.Renderer.Register(this);
+        }
 
         public void AddAnimation(Func<bool> trigger, Animation animation)
             => Animations.Add(trigger, animation);
@@ -80,9 +92,7 @@ namespace Joie.Components
 
             spriteBatch.Draw(CurrentAnimation.TextureComponent.Texture//texture
                             , new Vector2(100, 100)
-                            , CurrentAnimation.Division == DivisionMethod.ByPixel
-                                ? CurrentAnimation.SourceRectangle
-                                : CurrentAnimation.SourceRectangle//new Rectangle(C
+                            , CurrentAnimation.SourceRectangle//new Rectangle(C
                             
                             //SourceRectangle
                               //CurrentAnimation.Division == DivisionMethod.ByPixel
@@ -120,7 +130,7 @@ namespace Joie.Components
 
     public class Animation
     {
-        public DivisionMethod Division { get; set; }
+        //public DivisionMethod Division { get; set; }
         public Texture2DComponent TextureComponent { get; set; }
         public Vector2 SourceRectanglePosition { get; set; }
         //public Vector2 SourceRectangleSize { get; set; }
@@ -149,23 +159,26 @@ namespace Joie.Components
         public int Columns { get; set; }
         public int Rows { get; set; }
 
-        public Animation(Texture2DComponent texture, float xFrameSize = 1, float yFrameSize = 1, DivisionMethod division = DivisionMethod.Fractional, float speed = 0.2f)
+        public Animation(Texture2DComponent texture, float xFrameSize = 1, float yFrameSize = 1, DivisionMethod division = DivisionMethod.Fractional, float speed = 10f)
         {
             TextureComponent = texture;
 
-            AnimationSpeed = speed;
+            AnimationSpeed = 1/speed;
 
-            if (division == DivisionMethod.Fractional)
-            {
-                //Console.WriteLine(texture.SourceRectangleSize.X * xFrameSize);
-                FrameWidth = texture.SourceRectangleSize.X * xFrameSize;
-                FrameHeight = texture.SourceRectangleSize.Y * yFrameSize;
-            }
-            else
-            {
-                FrameWidth = xFrameSize;
-                FrameHeight = yFrameSize;
-            }
+            //if (division == DivisionMethod.Fractional)
+            //{
+            //    //Console.WriteLine(texture.SourceRectangleSize.X * xFrameSize);
+            //    FrameWidth = texture.SourceRectangleSize.X * xFrameSize;
+            //    FrameHeight = texture.SourceRectangleSize.Y * yFrameSize;
+            //}
+            //else
+            //{
+            //    FrameWidth = xFrameSize;
+            //    FrameHeight = yFrameSize;
+            //}
+            var frameSize = new Vector2(xFrameSize, yFrameSize).ApplyDivisionMethod(division, texture.SourceRectangleSize);
+            FrameWidth = frameSize.X;
+            FrameHeight = frameSize.Y;
 
             //X
             Columns = (int)(1 / xFrameSize);

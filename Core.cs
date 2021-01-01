@@ -44,7 +44,6 @@ namespace Joie
             Renderer = new RenderSystem();
             Builder = new BuildSystem();//BuildSystem(Renderer);
 
-            //CurrentScene.Scene_Canvas();
             Builder.System_BuildScene(CurrentScene);
 
             base.Initialize();
